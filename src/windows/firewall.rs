@@ -18,6 +18,7 @@ impl ComApartment {
     fn init() -> Result<Self> {
         unsafe {
             CoInitializeEx(None, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE)
+                .ok()
                 .map_err(|error| anyhow!("CoInitializeEx failed: {error}"))?;
         }
         Ok(Self)

@@ -1,7 +1,8 @@
 use std::mem::size_of;
+use std::ptr::addr_of;
 
 use anyhow::{Result, anyhow};
-use windows::Win32::Foundation::ERROR_CANCELLED;
+use windows::Win32::Foundation::{ERROR_CANCELLED, HANDLE};
 use windows::Win32::System::Threading::{GetExitCodeProcess, INFINITE, WaitForSingleObject};
 use windows::Win32::UI::Shell::{
     SEE_MASK_NOASYNC, SEE_MASK_NOCLOSEPROCESS, SHELLEXECUTEINFOW, ShellExecuteExW,
@@ -48,6 +49,10 @@ fn to_wide_null(value: &str) -> Vec<u16> {
     value.encode_utf16().chain(std::iter::once(0)).collect()
 }
 
+fn shell_execute_process_handle(info: &SHELLEXECUTEINFOW) -> HANDLE {
+    unsafe { addr_of!((*info).hProcess).read_unaligned() }
+}
+
 fn shell_execute_and_exit_code(info: &mut SHELLEXECUTEINFOW) -> Result<u32> {
     unsafe {
         ShellExecuteExW(info).map_err(|error| {
@@ -59,11 +64,12 @@ fn shell_execute_and_exit_code(info: &mut SHELLEXECUTEINFOW) -> Result<u32> {
                 anyhow!("ShellExecuteExW failed: {error}")
             }
         })?;
-        if info.hProcess.is_invalid() {
+        let process_handle = shell_execute_process_handle(info);
+        if process_handle.is_invalid() {
             return Ok(0);
         }
 
-        let process = Handle(info.hProcess);
+        let process = Handle(process_handle);
         let mut exit_code = 0u32;
         WaitForSingleObject(process.0, INFINITE);
         GetExitCodeProcess(process.0, &mut exit_code)
