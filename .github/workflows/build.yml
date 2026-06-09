@@ -407,6 +407,10 @@ jobs:
               throw new Error(`Missing ${required} from main npm package`)
             }
           }
+          const nativeFiles = names.filter((name) => name.endsWith('.node'))
+          if (nativeFiles.length > 0) {
+            throw new Error(`Main npm package must not include native binaries: ${nativeFiles.join(', ')}`)
+          }
           NODE
         working-directory: napi
 
