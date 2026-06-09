@@ -1,0 +1,8 @@
+/target/
+/napi/node_modules/
+/napi/npm/
+/napi/artifacts/
+/napi/*.node
+/napi/napi.generated.d.ts
+*.log
+.DS_Store
