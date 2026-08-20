@@ -9,8 +9,8 @@ description = "Sparkle native bridge bindings"
 crate-type = ["cdylib"]
 
 [dependencies]
-napi = { version = "2", features = ["napi4"] }
-napi-derive = "2"
+napi = { version = "3", features = ["napi4"] }
+napi-derive = "3"
 sparkle-native = { path = ".." }
 
 [build-dependencies]

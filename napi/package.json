@@ -5,7 +5,7 @@
   "type": "module",
   "main": "index.js",
   "types": "index.d.ts",
-  "packageManager": "pnpm@11.1.1",
+  "packageManager": "pnpm@11.3.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/UruhaLushia/sparkle-native.git"
@@ -40,7 +40,7 @@
     "artifacts": "napi artifacts"
   },
   "devDependencies": {
-    "@napi-rs/cli": "^3"
+    "@napi-rs/cli": "^3.8.6"
   },
   "engines": {
     "node": ">=16"
